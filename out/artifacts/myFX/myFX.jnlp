@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="myFX.jnlp">
+  <information>
+    <title>myFX</title>
+    <vendor>Unknown</vendor>
+    <description>myFX</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="myFX.jar" size="13368" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="600" height="400" main-class="sample.MainApp"  name="myFX" />
+  <update check="background"/>
+</jnlp>
