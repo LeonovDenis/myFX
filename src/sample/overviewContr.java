@@ -1,13 +1,11 @@
 package sample;
 
 import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,12 +41,15 @@ public class overviewContr {
     private TextField portVideo;
 
     @FXML
-    private AreaChart<Integer, Integer> AreaChart;
+    private AreaChart<Number, Number> AreaChart;
 
     @FXML
-    private CategoryAxis xAxis;
+    private NumberAxis xAxis;
 
-    private  ObservableList<Integer> chennels = FXCollections.observableArrayList();
+    @FXML
+    private NumberAxis yAxis;
+
+    static XYChart.Series<Number, Number> series;
 
 
 
@@ -74,15 +75,15 @@ public class overviewContr {
 
         resiveColumn.setCellValueFactory(cellData -> cellData.getValue().otvetProperty());
 
-       for (int i = 0; i <288 ; i++) {
+
+       series = new XYChart.Series<>();
+     /**  for (int i = 0; i <600 ; i++) {
 
 
-           // Преобразуем его в список и добавляем в наш ObservableList месяцев.
-           chennels.add(i);
-       }
-       // Назначаем имена месяцев категориями для горизонтальной оси.
-       System.out.println(chennels.size());
-         //xAxis.setCategories(chennels);
+       series.getData().add(new XYChart.Data<>(i,i*i));
+   }**/
+       AreaChart.setAnimated(false);
+       AreaChart.getData().add(series);
 
 
     }
@@ -106,46 +107,50 @@ public class overviewContr {
 
         message temple =new message(header.getText(), func.getText(),reserv.getText(),error.getText(),data.getText(),null);
 
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Runnable sender= null;
+                try {
+                    sender = new UdpSender(mainApp, InetAddress.getByName(ipARM.getText()),Integer.parseInt(portARM.getText()),temple);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(sender);
+            }
+        });
 
-
-        Thread thread = null;
-        try {
-            thread = new Thread(new UdpSender(mainApp,InetAddress.getByName(ipARM.getText()),Integer.parseInt(portARM.getText()),temple), "Дополнительный поток");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        thread.setDaemon(true);
+        thread.start();
         System.out.println("Создан дополнительный поток отправки " +
                 thread);
-        thread.start();
 
     }
 
     @FXML
     private void handleVideoButton() {
 
-        Thread thread = new Thread(new UdpServer(mainApp,Integer.parseInt(portVideo.getText())), "Дополнительный поток");
-        System.out.println("Создан дополнительный поток " +
-                thread);
+
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Runnable resiever = new UdpServer(mainApp,Integer.parseInt(portVideo.getText()));
+                Thread thread2=new Thread(resiever,"поток");
+                thread2.setDaemon(true);
+                thread2.start();
+            }
+        });
+
+        thread.setDaemon(true);
         thread.start();
+        System.out.println("Создан дополнительный поток приема " +
+                thread);
+
+
 
 
     }
 
-    public  void setPersonData(String data) {
-        // Считаем адресатов, имеющих дни рождения в указанном месяце.
-        byte[] b=new byte[chennels.size()];
-        b=data.getBytes();
-        System.out.println(b.length);
-        XYChart.Series<Integer, Integer> series = new XYChart.Series<>();
 
-        // Создаём объект XYChart.Data для каждого месяца.
-        // Добавляем его в серии.
-        for (int i = 0; i < 288; i++) {
-            series.getData().add(new XYChart.Data<>(i, i<b.length?(int)b[i]:0));
-        }
-        System.out.println("sdfsdsdsd");
-        AreaChart.getData().add(series);
-    }
 
 }

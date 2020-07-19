@@ -1,10 +1,6 @@
 package sample;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -22,29 +18,19 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     overviewContr controller;
+
     private ObservableList<message> send = FXCollections.observableArrayList();
 
 
-    private ObservableList<String> video = FXCollections.observableArrayList();
+    private ObservableList<Short> video = FXCollections.observableArrayList();
 
-  @Override
+    @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Test App");
 
         initRootLayout();
 
-       // showPersonOverview();
-
-      primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-          @Override
-          public void handle(WindowEvent t) {
-              System.out.println(send.toString());
-              System.out.println(video.toString());
-              Platform.exit();
-              System.exit(0);
-          }
-      });
 
     }
 
@@ -57,11 +43,8 @@ public class MainApp extends Application {
             // Загружаем корневой макет из fxml файла.
             FXMLLoader loader = new FXMLLoader();
 
-           // loader.setLocation(MainApp.class.getResource("RootLayer.fxml"));
-
             loader.setLocation(MainApp.class.getResource("sample.fxml"));
 
-           // rootLayout = (BorderPane) loader.load();
             AnchorPane rootLayout = (AnchorPane) loader.load();
 
             // Отображаем сцену, содержащую корневой макет.
@@ -71,37 +54,27 @@ public class MainApp extends Application {
 
             controller = loader.getController();
             controller.setMainApp(this);
-            controller.setPersonData("aasassas");
+            // controller.setPersonData("aasassas");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                System.out.println(send.toString());
+                System.out.println(video.toString());
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 
-    /**
-     * Показывает в корневом макете сведения об адресатах.
-     */
-   /* public void showPersonOverview() {
-        try {
-            // Загружаем сведения об адресатах.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("sample.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
 
-            // Помещаем сведения об адресатах в центр корневого макета.
-            rootLayout.setCenter(personOverview);
-
-            // Даём контроллеру доступ к главному приложению.
-            overviewContr controller = loader.getController();
-            controller.setMainApp(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-*/
     /**
      * Возвращает главную сцену.
+     *
      * @return
      */
     public Stage getPrimaryStage() {
@@ -115,19 +88,21 @@ public class MainApp extends Application {
     public ObservableList<message> getsend() {
         return send;
     }
-    public ObservableList<String> getvideo() {
+
+    public ObservableList<Short> getvideo() {
 
         return video;
     }
 
-   public MainApp() {
+    public MainApp() {
 
 
-   }
-   void initchar(String sentence){
-       this.getvideo().add(sentence);
-      controller.setPersonData(sentence);
-       System.out.println("cvcvcvcv");
-   }
-
+    }
+    /**
+     void initchar(String sentence){
+     this.getvideo().add(sentence);
+     controller.setPersonData(sentence);
+     System.out.println("cvcvcvcv");
+     }
+     */
 }

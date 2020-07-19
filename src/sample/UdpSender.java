@@ -1,12 +1,8 @@
 package sample;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
-
-import javax.xml.bind.DatatypeConverter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
+import org.apache.commons.codec.binary.Hex;
 
 public class UdpSender implements Runnable{
 
@@ -30,25 +26,11 @@ public class UdpSender implements Runnable{
             System.out.println("Отправка");
 
             DatagramSocket clientSocket = new DatagramSocket();
-            byte[] sendData = new byte[1024];
-            byte[] receiveData = new byte[1024];
+            byte[] sendData = new byte[248];
+            byte[] receiveData = new byte[248];
             String sentence = mes.getFull();
 
-/*
-            String input = sentence; // my UTF-16 string
-            StringBuilder sb = new StringBuilder(input.length());
-            for (int i = 0; i < input.length(); i++) {
-                char ch = input.charAt(i);
-                if (ch <= 0xFF) {
-                    sb.append(ch);
-                }
-            }
-
-            byte[] ascii = sb.toString().getBytes("ISO-8859-1"); // aka LATIN-1
-
-            sendData =ascii;
-*/
-              sendData = sentence.getBytes();
+            sendData=Hex.decodeHex(sentence);
 
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, addr, port);
             clientSocket.send(sendPacket);
@@ -60,24 +42,24 @@ public class UdpSender implements Runnable{
 
                 clientSocket.receive(receivePacket);
 
-
-                String modifiedSentence = new String(receivePacket.getData());
+                String modifiedSentence = new String(Hex.encodeHex(receivePacket.getData()));
                 mes.setOtvet(modifiedSentence);
 
-
-                mainApp.getsend().add(mes);
 
             } catch (SocketTimeoutException e) {
 
                 // если время ожидания вышло
                 System.out.println("Истекло время ожидания, прием данных закончен");
                 mes.setOtvet("Нет ответа");
-                mainApp.getsend().add(mes);
+
             }
 
         } catch (Exception e) {
             System.out.println("Оххх1");
             e.printStackTrace();
+        }
+        finally{
+            mainApp.getsend().add(mes);
         }
     }
 

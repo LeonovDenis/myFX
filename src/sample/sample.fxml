@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -111,13 +113,26 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <AreaChart fx:id="AreaChart" layoutX="-62.0" layoutY="-138.0" prefHeight="124.0" prefWidth="392.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <AreaChart fx:id="AreaChart" animated="false" layoutX="-62.0" layoutY="-138.0" legendVisible="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="124.0" prefWidth="392.0" title="Токи" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <xAxis>
-                                              <NumberAxis side="BOTTOM" />
+                                              <NumberAxis animated="false" disable="true" forceZeroInRange="false" minorTickCount="10" side="BOTTOM" tickLabelFill="#3262db" tickLength="10.0" fx:id="xAxis" />
                                             </xAxis>
                                             <yAxis>
-                                              <NumberAxis side="LEFT" />
+                                              <NumberAxis fx:id="yAxis" animated="false" side="LEFT" />
                                             </yAxis>
+                                             <cursor>
+                                                <Cursor fx:constant="TEXT" />
+                                             </cursor>
+                                             <effect>
+                                                <Lighting>
+                                                   <bumpInput>
+                                                      <Shadow />
+                                                   </bumpInput>
+                                                   <light>
+                                                      <Light.Distant />
+                                                   </light>
+                                                </Lighting>
+                                             </effect>
                                           </AreaChart>
                                        </children></AnchorPane>
                                 </items>
