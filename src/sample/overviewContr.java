@@ -40,8 +40,7 @@ public class overviewContr {
     @FXML
     private TextField portVideo;
 
-    @FXML
-    private AreaChart<Number, Number> AreaChart;
+
 
     @FXML
     private NumberAxis xAxis;
@@ -51,6 +50,8 @@ public class overviewContr {
 
     static XYChart.Series<Number, Number> series;
 
+    @FXML
+    private AreaChart<Number, Number> AreaChart;
 
 
 
@@ -77,11 +78,7 @@ public class overviewContr {
 
 
        series = new XYChart.Series<>();
-     /**  for (int i = 0; i <600 ; i++) {
 
-
-       series.getData().add(new XYChart.Data<>(i,i*i));
-   }**/
        AreaChart.setAnimated(false);
        AreaChart.getData().add(series);
 
@@ -130,7 +127,7 @@ public class overviewContr {
     @FXML
     private void handleVideoButton() {
 
-
+        mainApp.setStop(false);
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
@@ -150,7 +147,10 @@ public class overviewContr {
 
 
     }
-
+    @FXML
+    private void setStop(){
+        mainApp.setStop(true);
+    }
 
 
 }

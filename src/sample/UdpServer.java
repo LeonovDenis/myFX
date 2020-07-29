@@ -26,13 +26,17 @@ public class UdpServer implements Runnable {
 
     @Override
     public void run() {
+        DatagramSocket serverSocket=null;
+        DatagramPacket receivePacket=null;
+
         try {
 
-            DatagramSocket serverSocket = new DatagramSocket(port);
+            serverSocket = new DatagramSocket(port);
+
             byte[] receiveData = new byte[1156];
             System.out.println("Добро пожаловать на Серверную чаcть");
-            while (true) {
-                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            while (!mainApp.isStop()) {
+                receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
 
                 String sentence = new String(Hex.encodeHex(receivePacket.getData()));
@@ -58,7 +62,7 @@ public class UdpServer implements Runnable {
                         for (int i = 0; i <videodata.length ; i++) {
 
 
-                     overviewContr.series.getData().add(new XYChart.Data<>(i,videodata[i]))   ;
+                     overviewContr.series.getData().add(new XYChart.Data<>(i,videodata[i]!=null?videodata[i]:0))   ;
                     }
 
 
@@ -68,9 +72,14 @@ public class UdpServer implements Runnable {
                 System.out.println("runs");
 
             }
+
         } catch (Exception e) {
             System.out.println("Оххх");
             e.printStackTrace();
+        }
+        finally{serverSocket.close();
+
+
         }
 
     }

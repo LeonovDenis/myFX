@@ -18,6 +18,15 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     overviewContr controller;
+    private volatile boolean stop=false;
+
+    public boolean isStop() {
+        return stop;
+    }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
 
     private ObservableList<message> send = FXCollections.observableArrayList();
 
@@ -54,7 +63,6 @@ public class MainApp extends Application {
 
             controller = loader.getController();
             controller.setMainApp(this);
-            // controller.setPersonData("aasassas");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,11 +106,5 @@ public class MainApp extends Application {
 
 
     }
-    /**
-     void initchar(String sentence){
-     this.getvideo().add(sentence);
-     controller.setPersonData(sentence);
-     System.out.println("cvcvcvcv");
-     }
-     */
+
 }
