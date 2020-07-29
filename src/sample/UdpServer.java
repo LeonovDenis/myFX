@@ -33,6 +33,7 @@ public class UdpServer implements Runnable {
 
             serverSocket = new DatagramSocket(port);
 
+
             byte[] receiveData = new byte[1156];
             System.out.println("Добро пожаловать на Серверную чаcть");
             while (!mainApp.isStop()) {
@@ -75,9 +76,16 @@ public class UdpServer implements Runnable {
 
         } catch (Exception e) {
             System.out.println("Оххх");
-            e.printStackTrace();
+            //e.printStackTrace();
+            if(serverSocket!=null){
+                serverSocket.close();
+                System.out.println("erttttt");
+            }
         }
-        finally{serverSocket.close();
+        finally{if(serverSocket!=null){
+            serverSocket.close();
+            System.out.println("tratata");
+        };
 
 
         }
