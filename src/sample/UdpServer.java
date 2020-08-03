@@ -17,7 +17,7 @@ public class UdpServer implements Runnable {
     private int port;
 
     private MainApp mainApp;
-    private Short[] videodata = new Short[1152];
+    private Short[] videodata = new Short[576];
 
     public UdpServer(MainApp mainApp, int port) {
         this.port = port;
@@ -43,7 +43,7 @@ public class UdpServer implements Runnable {
                 String sentence = new String(Hex.encodeHex(receivePacket.getData()));
                 System.out.println("RECEIVED: " + sentence);
 
-                if (sentence.startsWith("3FFF")) {
+                if (sentence.toUpperCase().startsWith("3FFF")) {
                     videodata = byteToShort(receivePacket.getData());
 
                     //mainApp.getvideo().clear();
@@ -60,7 +60,7 @@ public class UdpServer implements Runnable {
                         System.out.println("adding");
 
                         overviewContr.series.getData().clear();
-                        for (int i = 0; i <videodata.length ; i++) {
+                        for (int i = 0; i <288 ; i++) {
 
 
                      overviewContr.series.getData().add(new XYChart.Data<>(i,videodata[i]!=null?videodata[i]:0))   ;

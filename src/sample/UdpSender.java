@@ -26,11 +26,11 @@ public class UdpSender implements Runnable{
             System.out.println("Отправка");
 
             DatagramSocket clientSocket = new DatagramSocket();
-            byte[] sendData = new byte[248];
+
             byte[] receiveData = new byte[248];
             String sentence = mes.getFull();
 
-            sendData=Hex.decodeHex(sentence);
+            byte[] sendData=Hex.decodeHex(sentence);
 
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, addr, port);
             clientSocket.send(sendPacket);
